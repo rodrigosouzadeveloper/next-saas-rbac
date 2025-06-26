@@ -41,8 +41,43 @@ This project contains all the necessary boilerplate to setup a multi-tenant SaaS
 
 - [ ] It should be able to get billing details for organization ($20 per project / $10 per member excluding billing role);
 
+## RBAC
+
+Roles & permissions.
+
 ### Roles
 
+- Owner (count as administrator)
 - Administrator
 - Member
-- Billing
+- Billing (one per organization)
+- Anonymous
+
+### Permissions table
+
+|                          | Administrator | Member | Billing | Anonymous |
+| ------------------------ | ------------- | ------ | ------- | --------- |
+| Update organization      | ✅            | ❌      | ❌       | ❌        |
+| Delete organization      | ✅            | ❌      | ❌       | ❌        |
+| Invite a member          | ✅            | ❌      | ❌       | ❌        |
+| Revoke an invite         | ✅            | ❌      | ❌       | ❌        |
+| List members             | ✅            | ✅     | ✅      | ❌        |
+| Transfer ownership       | ⚠️            | ❌      | ❌       | ❌        |
+| Update member role       | ✅            | ❌      | ❌       | ❌        |
+| Delete member            | ✅            | ⚠️     | ❌       | ❌        |
+| List projects            | ✅            | ✅     | ✅      | ❌        |
+| Create a new project     | ✅            | ✅     | ❌       | ❌        |
+| Update a project         | ✅            | ⚠️     | ❌       | ❌        |
+| Delete a project         | ✅            | ⚠️     | ❌       | ❌        |
+| Get billing details      | ✅            | ❌      | ✅      | ❌        |
+| Export billing details   | ✅            | ❌      | ✅      | ❌        |
+
+> ✅ = allowed
+> ❌ = not allowed
+> ⚠️ = allowed w/ conditions
+
+#### Conditions
+
+- Only owners may transfer organization ownership;
+- Only administrators and project authors may update/delete the project;
+- Members can leave their own organization;
